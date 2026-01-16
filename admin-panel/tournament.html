@@ -8,23 +8,19 @@
 
   <h2>Create Tournament</h2>
 
-  <input id="title" placeholder="Tournament Title"><br><br>
+  <input id="title" placeholder="Title"><br><br>
+  <input id="matchTime" type="datetime-local"><br><br>
 
-  <select id="type">
-    <option value="free">Free</option>
-    <option value="paid">Paid</option>
-  </select><br><br>
+  <h3>Coins</h3>
+  <input id="entryCoins" type="number" placeholder="Entry Coins"><br><br>
+  <input id="perKillCoins" type="number" placeholder="Coins Per Kill"><br><br>
 
-  <input id="entryFee" type="number" placeholder="Entry Fee (0 for free)"><br><br>
-  <input id="prizeCoins" type="number" placeholder="Prize Coins"><br><br>
-  <input id="maxPlayers" type="number" placeholder="Max Players"><br><br>
+  <h3>Prizes</h3>
+  <input id="first" type="number" placeholder="1st Prize"><br><br>
+  <input id="second" type="number" placeholder="2nd Prize"><br><br>
+  <input id="third" type="number" placeholder="3rd Prize"><br><br>
 
   <button onclick="createTournament()">Create Tournament</button>
-
-  <hr>
-
-  <h2>All Tournaments</h2>
-  <div id="list"></div>
 
   <script src="js/config.js"></script>
   <script src="js/auth.js"></script>
