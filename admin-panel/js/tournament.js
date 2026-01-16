@@ -1,14 +1,9 @@
-// LOAD ALL TOURNAMENTS
+// LOAD TOURNAMENTS
 async function loadTournaments() {
   try {
     const res = await fetch(`${API_BASE_URL}/tournaments`, {
       headers: authHeaders()
     });
-
-    if (!res.ok) {
-      alert("Failed to load tournaments");
-      return;
-    }
 
     const data = await res.json();
 
@@ -16,17 +11,20 @@ async function loadTournaments() {
     data.forEach(t => {
       html += `
         <p>
-          <b>${t.title}</b> |
-          Type: ${t.type} |
-          Entry: ${t.entryFee} |
-          Prize: ${t.prizeCoins} |
-          Players: ${t.maxPlayers}
+          <b>${t.title}</b><br>
+          Type: ${t.type}<br>
+          Entry Coins: ${t.entryCoins}<br>
+          Per Kill: ${t.perKillCoins}<br>
+          1st: ${t.prizes.first} |
+          2nd: ${t.prizes.second} |
+          3rd: ${t.prizes.third}<br>
+          Status: ${t.status}
         </p>
+        <hr>
       `;
     });
 
     document.getElementById("list").innerHTML = html;
-
   } catch (err) {
     console.error(err);
     alert("Error loading tournaments");
@@ -38,9 +36,14 @@ async function createTournament() {
   const payload = {
     title: document.getElementById("title").value,
     type: document.getElementById("type").value,
-    entryFee: Number(document.getElementById("entryFee").value),
-    prizeCoins: Number(document.getElementById("prizeCoins").value),
-    maxPlayers: Number(document.getElementById("maxPlayers").value),
+    entryCoins: Number(document.getElementById("entryCoins").value),
+    perKillCoins: Number(document.getElementById("perKillCoins").value),
+    prizes: {
+      first: Number(document.getElementById("first").value),
+      second: Number(document.getElementById("second").value),
+      third: Number(document.getElementById("third").value)
+    },
+    matchTime: document.getElementById("matchTime").value
   };
 
   if (!payload.title) {
@@ -49,10 +52,10 @@ async function createTournament() {
   }
 
   try {
-    const res = await fetch(`${API_BASE_URL}/tournaments`, {
+    const res = await fetch(`${API_BASE_URL}/tournaments/create`, {
       method: "POST",
       headers: authHeaders(),
-      body: JSON.stringify(payload),
+      body: JSON.stringify(payload)
     });
 
     const data = await res.json();
@@ -65,13 +68,9 @@ async function createTournament() {
     alert("✅ Tournament created successfully");
 
     // clear inputs
-    document.getElementById("title").value = "";
-    document.getElementById("entryFee").value = "";
-    document.getElementById("prizeCoins").value = "";
-    document.getElementById("maxPlayers").value = "";
+    document.querySelectorAll("input").forEach(i => i.value = "");
 
     loadTournaments();
-
   } catch (err) {
     console.error(err);
     alert("Error creating tournament");
