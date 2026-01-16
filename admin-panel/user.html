@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Users</title>
+</head>
+<body onload="checkAdminAuth(); loadUsers();">
+
+<h2>Users List</h2>
+<table border="1" cellpadding="5">
+  <thead>
+    <tr>
+      <th>Email</th>
+      <th>Username</th>
+      <th>In-Game Name</th>
+      <th>Coins</th>
+      <th>Role</th>
+    </tr>
+  </thead>
+  <tbody id="users"></tbody>
+</table>
+
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/users.js"></script>
+</body>
+</html>
