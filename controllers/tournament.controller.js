@@ -1,7 +1,7 @@
 const Tournament = require("../models/Tournament");
 const User = require("../models/User");
 
-/* ========== USER ========== */
+/* ================= USER ================= */
 
 // Get tournaments
 exports.getTournaments = async (req, res) => {
@@ -25,7 +25,7 @@ exports.joinTournament = async (req, res) => {
 
   const user = await User.findById(userId);
 
-  // PAID TOURNAMENT
+  // Paid tournament
   if (tournament.type === "paid") {
     if (user.coins < tournament.entryCoins) {
       return res.status(400).json({ message: "Not enough coins" });
@@ -34,15 +34,13 @@ exports.joinTournament = async (req, res) => {
     await user.save();
   }
 
-  // FREE TOURNAMENT → ad handled by app, backend trusts app
   tournament.participants.push(userId);
   await tournament.save();
 
   res.json({ message: "Joined tournament successfully" });
 };
 
-
-/* ========== ADMIN ========== */
+/* ================= ADMIN ================= */
 
 // Create tournament
 exports.createTournament = async (req, res) => {
@@ -68,23 +66,37 @@ exports.addRoomDetails = async (req, res) => {
   res.json({ message: "Room details added" });
 };
 
-// Complete tournament & give prize
+// ✅ COMPLETE TOURNAMENT (PER KILL + RANK PRIZE)
 exports.completeTournament = async (req, res) => {
   const { id } = req.params;
-  const { winnerUserId } = req.body;
+  const { results } = req.body;
+  /*
+    results = [
+      { userId, kills, rank }
+    ]
+  */
 
   const tournament = await Tournament.findById(id);
   if (!tournament) {
     return res.status(404).json({ message: "Tournament not found" });
   }
 
-  const winner = await User.findById(winnerUserId);
-  winner.coins += tournament.prizeCoins;
+  for (const r of results) {
+    const user = await User.findById(r.userId);
+    if (!user) continue;
+
+    let coins = r.kills * tournament.perKillCoins;
+
+    if (r.rank === 1) coins += tournament.prizes.first;
+    if (r.rank === 2) coins += tournament.prizes.second;
+    if (r.rank === 3) coins += tournament.prizes.third;
+
+    user.coins += coins;
+    await user.save();
+  }
 
   tournament.status = "completed";
-
-  await winner.save();
   await tournament.save();
 
-  res.json({ message: "Tournament completed & prize credited" });
+  res.json({ message: "Tournament completed & rewards distributed" });
 };
