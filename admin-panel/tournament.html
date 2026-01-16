@@ -1,12 +1,34 @@
 <!DOCTYPE html>
 <html>
+<head>
+  <title>Tournaments</title>
+</head>
+
 <body onload="checkAdminAuth(); loadTournaments();">
 
-<h2>Tournaments</h2>
-<div id="list"></div>
+  <h2>Create Tournament</h2>
 
-<script src="js/config.js"></script>
-<script src="js/auth.js"></script>
-<script src="js/tournament.js"></script>
+  <input id="title" placeholder="Tournament Title"><br><br>
+
+  <select id="type">
+    <option value="free">Free</option>
+    <option value="paid">Paid</option>
+  </select><br><br>
+
+  <input id="entryFee" type="number" placeholder="Entry Fee (0 for free)"><br><br>
+  <input id="prizeCoins" type="number" placeholder="Prize Coins"><br><br>
+  <input id="maxPlayers" type="number" placeholder="Max Players"><br><br>
+
+  <button onclick="createTournament()">Create Tournament</button>
+
+  <hr>
+
+  <h2>All Tournaments</h2>
+  <div id="list"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/tournament.js"></script>
+
 </body>
 </html>
