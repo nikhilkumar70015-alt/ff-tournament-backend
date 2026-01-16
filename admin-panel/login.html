@@ -18,7 +18,7 @@ async function login() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  const res = await fetch(`${API_BASE_URL}/auth/login`, {
+  const res = await fetch(`/api/auth/admin/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password })
@@ -26,11 +26,11 @@ async function login() {
 
   const data = await res.json();
 
-  if (data.token && data.user.isAdmin) {
+  if (data.token) {
     localStorage.setItem("adminToken", data.token);
     window.location.href = "dashboard.html";
   } else {
-    alert("Admin access denied");
+    alert(data.message || "Admin access denied");
   }
 }
 </script>
