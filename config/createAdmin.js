@@ -2,33 +2,32 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 
 const createAdminIfNotExists = async () => {
-  if (!process.env.ADMIN_EMAIL || !process.env.ADMIN_PASSWORD) {
-    console.log("⚠️ Admin env variables not set");
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+
+  if (!adminEmail || !adminPassword) {
+    console.log("❌ ADMIN_EMAIL or ADMIN_PASSWORD missing");
     return;
   }
 
-  const existingAdmin = await User.findOne({
-    email: process.env.ADMIN_EMAIL,
-    role: "admin",
-  });
-
+  const existingAdmin = await User.findOne({ email: adminEmail });
   if (existingAdmin) {
     console.log("✅ Admin already exists");
     return;
   }
 
-  const hashedPassword = await bcrypt.hash(
-    process.env.ADMIN_PASSWORD,
-    10
-  );
+  const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
   await User.create({
-    email: process.env.ADMIN_EMAIL,
+    email: adminEmail,
     password: hashedPassword,
-    role: "admin",
+    username: "admin",
+    inGameName: "ADMIN",
+    coins: 0,
+    isAdmin: true
   });
 
-  console.log("🔥 Admin account auto-created");
+  console.log("🔥 Admin user created successfully");
 };
 
 module.exports = createAdminIfNotExists;
