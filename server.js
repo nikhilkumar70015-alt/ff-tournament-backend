@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");
 const createAdminIfNotExists = require("./config/createAdmin");
+const path = require("path");
 
 const app = express();
 
@@ -10,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 // 🔐 ADMIN PANEL (STATIC)
-app.use("/admin", express.static("admin-panel"));
+app.use("/admin", express.static(path.join(__dirname, "admin-panel")));
 
 // 🔗 ROUTES
 app.use("/api/auth", require("./routes/auth.routes"));
