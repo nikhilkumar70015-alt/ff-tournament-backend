@@ -10,6 +10,12 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
+const createAdminIfNotExists = require("./config/createAdmin");
+
+connectDB().then(() => {
+  createAdminIfNotExists();
+});
+
 app.use("/api/auth", require("./routes/auth.routes"));
 // (tournament, coins, redeem routes yahin add honge – logic locked)
 app.use("/api/coins", require("./routes/coins.routes"));
