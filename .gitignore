@@ -1,0 +1,19 @@
+# secrets
+.env
+
+# node
+node_modules
+npm-debug.log*
+yarn-error.log*
+
+# logs
+logs
+*.log
+
+# editor
+.vscode
+.idea
+
+# os
+.DS_Store
+Thumbs.db
