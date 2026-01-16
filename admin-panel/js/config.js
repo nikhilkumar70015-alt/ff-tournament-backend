@@ -1,4 +1,4 @@
-const API_BASE_URL = "";
+const API_BASE_URL = "https://ff-tournament-backend.onrender.com";
 
 function getToken() {
   return localStorage.getItem("adminToken");
