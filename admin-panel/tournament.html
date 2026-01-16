@@ -6,25 +6,35 @@
 
 <body onload="checkAdminAuth(); loadTournaments();">
 
-  <h2>Create Tournament</h2>
+<h2>Create Tournament</h2>
 
-  <input id="title" placeholder="Title"><br><br>
-  <input id="matchTime" type="datetime-local"><br><br>
+<input id="title" placeholder="Title"><br><br>
 
-  <h3>Coins</h3>
-  <input id="entryCoins" type="number" placeholder="Entry Coins"><br><br>
-  <input id="perKillCoins" type="number" placeholder="Coins Per Kill"><br><br>
+<select id="type">
+  <option value="free">Free</option>
+  <option value="paid">Paid</option>
+</select><br><br>
 
-  <h3>Prizes</h3>
-  <input id="first" type="number" placeholder="1st Prize"><br><br>
-  <input id="second" type="number" placeholder="2nd Prize"><br><br>
-  <input id="third" type="number" placeholder="3rd Prize"><br><br>
+<input id="entryCoins" type="number" placeholder="Entry Coins"><br><br>
+<input id="perKillCoins" type="number" placeholder="Coins Per Kill"><br><br>
 
-  <button onclick="createTournament()">Create Tournament</button>
+<h3>Prizes</h3>
+<input id="first" type="number" placeholder="1st Prize"><br><br>
+<input id="second" type="number" placeholder="2nd Prize"><br><br>
+<input id="third" type="number" placeholder="3rd Prize"><br><br>
 
-  <script src="js/config.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/tournament.js"></script>
+<input id="matchTime" type="datetime-local"><br><br>
+
+<button onclick="createTournament()">Create Tournament</button>
+
+<hr>
+
+<h2>All Tournaments</h2>
+<div id="list"></div>
+
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/tournament.js"></script>
 
 </body>
 </html>
