@@ -2,29 +2,36 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");
+const createAdminIfNotExists = require("./config/createAdmin");
 
 const app = express();
-
-connectDB().then(() => {
-  createAdminIfNotExists();
-});
 
 app.use(cors());
 app.use(express.json());
 
-const createAdminIfNotExists = require("./config/createAdmin");
+// 🔐 ADMIN PANEL (STATIC)
+app.use("/admin", express.static("admin-panel"));
 
+// 🔗 ROUTES
 app.use("/api/auth", require("./routes/auth.routes"));
-// (tournament, coins, redeem routes yahin add honge – logic locked)
 app.use("/api/coins", require("./routes/coins.routes"));
 app.use("/api/tournaments", require("./routes/tournament.routes"));
 app.use("/api/redeem", require("./routes/redeem.routes"));
 app.use("/api/users", require("./routes/users.routes"));
 
+// ✅ DB CONNECT + ADMIN CREATE
+connectDB().then(async () => {
+  await createAdminIfNotExists();
+  console.log("✅ Admin checked/created");
+});
+
+// TEST ROUTE
 app.get("/", (req, res) => {
   res.send("🔥 Free Fire Tournament Backend Running");
 });
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server running on port ${process.env.PORT}`);
+// START SERVER
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, () => {
+  console.log("🚀 Server running on port", PORT);
 });
