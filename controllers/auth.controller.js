@@ -14,7 +14,8 @@ exports.register = async (req, res) => {
     email,
     password: hashed,
     username,
-    inGameName
+    inGameName,
+    role: "user"
   });
 
   res.json({ message: "Registered successfully" });
