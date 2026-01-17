@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
   username: { type: String, required: true },
   inGameName: { type: String, required: true },
   coins: { type: Number, default: 0 },
-  role: { type: String, enum: ["user", "admin"], default: user }
+  role: { type: String, enum: ["user", "admin"], default: "user" }
 }, { timestamps: true });
 
 module.exports = mongoose.model("User", userSchema);
