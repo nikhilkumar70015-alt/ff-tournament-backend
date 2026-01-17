@@ -5,8 +5,10 @@ function getToken() {
 }
 
 function authHeaders() {
+  const token = getToken();
+  console.log("ADMIN TOKEN =>", token);
   return {
     "Content-Type": "application/json",
-    "Authorization": getToken()
+    "Authorization": "Bearer " + token
   };
 }
