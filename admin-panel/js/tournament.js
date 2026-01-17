@@ -52,6 +52,8 @@ async function createTournament() {
   }
 
   try {
+    console.log("PAYLOAD =>", payload);
+    console.log("TOKEN =>", localStorage.getItem("token"));
     const res = await fetch(`${API_BASE_URL}/tournaments/create`, {
       method: "POST",
       headers: authHeaders(),
