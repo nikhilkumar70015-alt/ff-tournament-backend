@@ -272,5 +272,45 @@ router.get(
     }
   }
 );
+/**
+ * 💸 GET ALL PENDING WITHDRAW REQUESTS (ADMIN)
+ * GET /api/admin/withdrawals
+ */
+router.get(
+  "/withdrawals",
+  authMiddleware,
+  adminOnly,
+  async (req, res, next) => {
+    try {
+      const wallets = await Wallet.find({
+        "transactions.type": "WITHDRAW_REQUEST"
+      }).populate("user", "email");
+
+      const requests = [];
+
+      wallets.forEach((wallet) => {
+        wallet.transactions.forEach((tx) => {
+          if (tx.type === "WITHDRAW_REQUEST") {
+            requests.push({
+              userId: wallet.user._id,
+              email: wallet.user.email,
+              amount: tx.amount,
+              method: "UPI",
+              upiId: tx.reference,
+              createdAt: tx.createdAt
+            });
+          }
+        });
+      });
+
+      res.status(200).json({
+        success: true,
+        data: requests
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 export default router;
