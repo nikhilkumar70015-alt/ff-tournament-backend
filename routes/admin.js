@@ -312,5 +312,35 @@ router.get(
     }
   }
 );
+/**
+ * 👥 GET ALL USERS (ADMIN)
+ * GET /api/admin/users
+ */
+router.get(
+  "/users",
+  authMiddleware,
+  adminOnly,
+  async (req, res, next) => {
+    try {
+      const users = await User.find(
+        { role: "user" },
+        {
+          username: 1,
+          email: 1,
+          freeFireUID: 1,
+          isBanned: 1,
+          createdAt: 1
+        }
+      ).sort({ createdAt: -1 });
+
+      res.status(200).json({
+        success: true,
+        data: users
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 export default router;
