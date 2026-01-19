@@ -241,5 +241,36 @@ router.put(
     }
   }
 );
+/**
+ * 📊 ADMIN DASHBOARD STATS
+ * GET /api/admin/dashboard
+ */
+router.get(
+  "/dashboard",
+  authMiddleware,
+  adminOnly,
+  async (req, res, next) => {
+    try {
+      const tournamentsCount = await Tournament.countDocuments();
+      const usersCount = await User.countDocuments({ role: "user" });
+
+      // Pending withdrawals = last transaction WITHDRAW_REQUEST
+      const pendingWithdraws = await Wallet.countDocuments({
+        "transactions.type": "WITHDRAW_REQUEST"
+      });
+
+      res.status(200).json({
+        success: true,
+        data: {
+          tournaments: tournamentsCount,
+          users: usersCount,
+          pendingWithdraws
+        }
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 export default router;
