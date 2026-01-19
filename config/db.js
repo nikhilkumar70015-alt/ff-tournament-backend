@@ -1,20 +1,16 @@
-const mongoose = require("mongoose");
-const dns = require("dns");
-
-dns.setDefaultResultOrder("ipv4first");
+import mongoose from "mongoose";
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI, {
-      serverSelectionTimeoutMS: 10000,
-      family: 4, // Force IPv4
+    const conn = await mongoose.connect(process.env.MONGO_URI, {
+      autoIndex: true
     });
-    console.log("✅ MongoDB Connected");
-  } catch (err) {
-    console.error("❌ MongoDB Connection Failed");
-    console.error(err.message);
-    process.exit(1);
+
+    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.error("❌ MongoDB connection failed:", error.message);
+    process.exit(1); // Exit app if DB fails
   }
 };
 
-module.exports = connectDB;
+export default connectDB;
