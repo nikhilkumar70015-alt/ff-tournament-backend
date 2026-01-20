@@ -4,6 +4,7 @@ import Join from "../models/Join.js";
 import Wallet from "../models/Wallet.js";
 import User from "../models/User.js";
 import authMiddleware from "../middlewares/auth.js";
+import adminOnly from "../middlewares/adminOnly.js";
 
 const router = express.Router();
 
