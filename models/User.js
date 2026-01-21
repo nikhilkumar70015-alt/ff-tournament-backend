@@ -28,7 +28,8 @@ const userSchema = new mongoose.Schema(
 
     freeFireUID: {
       type: String,
-      required: true,
+      required: function () {
+        return this.role === "user";
       trim: true
     },
 
