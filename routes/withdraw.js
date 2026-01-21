@@ -2,21 +2,14 @@ import express from "express";
 import Wallet from "../models/Wallet.js";
 import User from "../models/User.js";
 import authMiddleware from "../middlewares/auth.js";
+import adminOnly from "../middlewares/adminOnly.js";
+import superAdminOnly from "../middlewares/superAdminOnly.js";
 
 const router = express.Router();
 
 /**
  * 🛡️ ADMIN CHECK (inline, final)
  */
-const adminOnly = (req, res, next) => {
-  if (req.user.role !== "admin") {
-    return res.status(403).json({
-      success: false,
-      message: "Admin access only"
-    });
-  }
-  next();
-};
 
 /**
  * 💸 USER WITHDRAW REQUEST
@@ -76,7 +69,7 @@ router.post("/request", authMiddleware, async (req, res, next) => {
 router.post(
   "/admin/action",
   authMiddleware,
-  adminOnly,
+  superAdminOnly,
   async (req, res, next) => {
     try {
       const { userId, amount, action } = req.body;
