@@ -1,43 +1,64 @@
+import express from "express";
+import User from "../models/User.js";
+import authMiddleware from "../middlewares/auth.js";
+
+const router = express.Router();
+
+/**
+ * SUPERADMIN → CREATE ADMIN
+ * POST /api/superadmin/create-admin
+ * Only superadmin can create admin
+ */
 router.post(
   "/create-admin",
   authMiddleware,
-  async (req, res) => {
-    if (req.user.role !== "superadmin") {
-      return res.status(403).json({
-        success: false,
-        message: "Superadmin access only"
+  async (req, res, next) => {
+    try {
+      // 🔒 Only superadmin allowed
+      if (req.user.role !== "superadmin") {
+        return res.status(403).json({
+          success: false,
+          message: "Superadmin access only",
+        });
+      }
+
+      const { username, email, password } = req.body;
+
+      if (!username || !email || !password) {
+        return res.status(400).json({
+          success: false,
+          message: "All fields are required",
+        });
+      }
+
+      const exists = await User.findOne({ email });
+      if (exists) {
+        return res.status(400).json({
+          success: false,
+          message: "User already exists with this email",
+        });
+      }
+
+      const admin = await User.create({
+        username,
+        email,
+        password,
+        role: "admin",
       });
-    }
 
-    const { username, email, password } = req.body;
-
-    if (!username || !email || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "All fields required"
+      res.status(201).json({
+        success: true,
+        message: "Admin created successfully",
+        admin: {
+          id: admin._id,
+          username: admin.username,
+          email: admin.email,
+          role: admin.role,
+        },
       });
+    } catch (error) {
+      next(error);
     }
-
-    const exists = await User.findOne({ email });
-    if (exists) {
-      return res.status(400).json({
-        success: false,
-        message: "User already exists"
-      });
-    }
-
-    const admin = await User.create({
-      username,
-      email,
-      password,
-      role: "admin"
-    });
-
-    res.status(201).json({
-      success: true,
-      message: "Admin created successfully",
-      adminId: admin._id
-    });
   }
 );
 
