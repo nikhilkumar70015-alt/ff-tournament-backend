@@ -8,6 +8,7 @@ import authRoutes from "./routes/auth.js";
 import tournamentRoutes from "./routes/tournament.js";
 import adminRoutes from "./routes/admin.js";
 import withdrawRoutes from "./routes/withdraw.js";
+import superAdminRoutes from "./routes/superadmin.js";
 
 // Load environment variables
 dotenv.config();
@@ -36,6 +37,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/tournaments", tournamentRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/withdraw", withdrawRoutes);
+app.use("/api/superadmin", superAdminRoutes);
 
 // Global error handler (safety)
 app.use((err, req, res, next) => {
