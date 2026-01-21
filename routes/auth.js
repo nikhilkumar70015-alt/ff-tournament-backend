@@ -10,7 +10,9 @@ const router = express.Router();
  */
 const generateToken = (userId) => {
   return jwt.sign(
-    { id: userId },
+    { id: user_.id,
+      role: user.role
+    },
     process.env.JWT_SECRET,
     { expiresIn: "30d" }
   );
@@ -59,7 +61,7 @@ router.post("/register", async (req, res, next) => {
     res.status(201).json({
       success: true,
       message: "Registration successful",
-      token: generateToken(user._id),
+      token: generateToken(user),
       user: {
         id: user._id,
         username: user.username,
@@ -118,7 +120,7 @@ router.post("/login", async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "Login successful",
-      token: generateToken(user._id),
+      token: generateToken(user),
       user: {
         id: user._id,
         username: user.username,
