@@ -61,5 +61,36 @@ router.post(
     }
   }
 );
+// ✅ GET ALL ADMINS (superadmin only)
+router.get(
+  "/admins",
+  authMiddleware,
+  async (req, res) => {
+    try {
+      // 🔒 only superadmin
+      if (req.user.role !== "superadmin") {
+        return res.status(403).json({
+          success: false,
+          message: "Superadmin access only",
+        });
+      }
+
+      const admins = await User.find(
+        { role: "admin" },
+        "-password"
+      ).sort({ createdAt: -1 });
+
+      res.json({
+        success: true,
+        admins,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: "Server error",
+      });
+    }
+  }
+);
 
 export default router;
