@@ -96,5 +96,47 @@ router.get(
     }
   }
 );
+// UPDATE ADMIN PERMISSIONS
+// PUT /api/superadmin/update-permissions/:adminId
+
+router.put(
+  "/update-permissions/:adminId",
+  authMiddleware,
+  async (req, res) => {
+    try {
+      // only superadmin
+      if (req.user.role !== "superadmin") {
+        return res.status(403).json({
+          success: false,
+          message: "Superadmin access only",
+        });
+      }
+
+      const { manageTournaments, manageWithdrawals } = req.body;
+
+      const admin = await User.findByIdAndUpdate(
+        req.params.adminId,
+        {
+          permissions: {
+            manageTournaments,
+            manageWithdrawals,
+          },
+        },
+        { new: true }
+      );
+
+      res.json({
+        success: true,
+        message: "Permissions updated",
+        permissions: admin.permissions,
+      });
+    } catch (err) {
+      res.status(500).json({
+        success: false,
+        message: "Server error",
+      });
+    }
+  }
+);
 
 export default router;
