@@ -248,7 +248,8 @@ router.get(
   async (req, res, next) => {
     try {
       const tournamentsCount = await Tournament.countDocuments();
-      const adminCount, usersCount = await User.countDocuments({ role: "admin", "user" });
+      const adminsCount = await Admin.countDocuments({role: "admin"});
+      const usersCount = await User.countDocuments({ role: "user" });
 
       // Pending withdrawals = last transaction WITHDRAW_REQUEST
       const pendingWithdraws = await Wallet.countDocuments({
