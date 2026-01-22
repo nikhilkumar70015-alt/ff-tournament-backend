@@ -71,7 +71,7 @@ router.post(
   "/admin/action",
   authMiddleware,
   adminOnly,
-  permissionCheck("manageWithdrawals")
+  permissionCheck("manageWithdrawals"),
   async (req, res, next) => {
     try {
       const { userId, amount, action } = req.body;
