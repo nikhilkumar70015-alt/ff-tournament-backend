@@ -260,7 +260,7 @@ router.get(
         success: true,
         data: {
           tournaments: tournamentsCount,
-          admins: andinsCount,
+          admins: adminsCount,
           users: usersCount,
           pendingWithdraws
         }
