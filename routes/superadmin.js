@@ -44,6 +44,10 @@ router.post(
         email,
         password,
         role: "admin",
+        permissions: {
+          manageTournaments: true,
+          manageWithdrawals: true,
+        },
       });
 
       res.status(201).json({
