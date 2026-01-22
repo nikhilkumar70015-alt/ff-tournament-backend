@@ -4,6 +4,7 @@ import User from "../models/User.js";
 import authMiddleware from "../middlewares/auth.js";
 import adminOnly from "../middlewares/adminOnly.js";
 import superAdminOnly from "../middlewares/superAdminOnly.js";
+import permissionCheck from "../middlewares/permission.js";
 
 const router = express.Router();
 
@@ -69,7 +70,8 @@ router.post("/request", authMiddleware, async (req, res, next) => {
 router.post(
   "/admin/action",
   authMiddleware,
-  superAdminOnly,
+  adminOnly,
+  permissionCheck("manageWithdrawals")
   async (req, res, next) => {
     try {
       const { userId, amount, action } = req.body;
