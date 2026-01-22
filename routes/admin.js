@@ -6,6 +6,7 @@ import User from "../models/User.js";
 import authMiddleware from "../middlewares/auth.js";
 import adminOnly from "../middlewares/adminOnly.js";
 import superAdminOnly from "../middlewares/superAdminOnly.js";
+import permissionCheck from "../middlewares/permission.js";
 
 const router = express.Router();
 
@@ -22,6 +23,7 @@ router.post(
   "/tournaments",
   authMiddleware,
   adminOnly,
+  permissionCheck("mangaeTournaments"),
   async (req, res, next) => {
     try {
       const {
@@ -128,7 +130,7 @@ router.put(
 router.post(
   "/tournaments/:id/results",
   authMiddleware,
-  superAdminOnly,
+  adminOnly,
   async (req, res, next) => {
     try {
       const { results } = req.body;
@@ -273,7 +275,8 @@ router.get(
 router.get(
   "/withdrawals",
   authMiddleware,
-  superAdminOnly,
+  adminOnly,
+  permissionCheck("manageWithdrawals"),
   async (req, res, next) => {
     try {
       const wallets = await Wallet.find({
