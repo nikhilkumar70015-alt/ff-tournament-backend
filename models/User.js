@@ -51,6 +51,17 @@ const userSchema = new mongoose.Schema(
       default: "user"
     },
 
+    permissions: {
+      manageTournaments: {
+        type: Boolean,
+        default: false,
+      },
+      manageWithdrawals: {
+        type: Boolean,
+        default: false,
+      },
+    },
+
     isBanned: {
       type: Boolean,
       default: false
